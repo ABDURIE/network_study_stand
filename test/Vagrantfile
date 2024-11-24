@@ -1,0 +1,28 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+## раскомментируйте если вам не доступен ванильный репозиторий vagrant
+ENV['VAGRANT_SERVER_URL'] = 'https://vagrant.elab.pro'
+## конфиг стенда
+Vagrant.configure("2") do |config|
+  config.vm.box = "ubuntu/jammy64"
+  config.vm.synced_folder ".", "/vagrant", disabled: true
+  config.vm.boot_timeout = 600
+  config.vm.box_download_insecure=true
+  config.vm.synced_folder "conf/", "/opt/conf", owner: "vagrant", group: "vagrant" ## указываем [локальную папку], [виртуальную папку]
+  config.vm.provision "init", type: "shell", path: "lib/init.sh" ## запускается скрипт из локальной папки
+  
+  config.vm.define "test" do |config|
+    config.vm.hostname = "test"
+    config.vm.network "private_network", ip: "192.168.100.100"
+    config.vm.disk :disk, size: "10GB", primary: true
+    
+    config.vm.provider "virtualbox" do |server|
+      server.name = "test"
+      server.cpus = 2
+      server.memory = "2048"
+    end
+    config.vm.provision "nginx", type: "shell", path: "lib/nginx.sh"
+  end
+
+end
