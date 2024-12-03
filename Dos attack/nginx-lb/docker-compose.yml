@@ -1,0 +1,34 @@
+services:
+  # NGINX load balancer
+  nginx:
+    image: nginx:latest
+    container_name: nginx-load-balancer
+    ports:
+      - "8080:80"  # Проброс порта 8080 на хосте на 80 в контейнере
+    volumes:
+      - ./nginx-lb.conf:/etc/nginx/nginx.conf  # Используем пользовательский конфиг для NGINX
+    depends_on:
+      - backend1
+      - backend2
+      - backend3
+
+  # Backend 1
+  backend1:
+    image: httpd:latest
+    container_name: backend1
+    volumes:
+      - ./html1:/usr/local/apache2/htdocs/  # Тестовая страница для backend1
+
+  # Backend 2
+  backend2:
+    image: httpd:latest
+    container_name: backend2
+    volumes:
+      - ./html2:/usr/local/apache2/htdocs/  # Тестовая страница для backend2
+
+  # Backend 3
+  backend3:
+    image: httpd:latest
+    container_name: backend3
+    volumes:
+      - ./html3:/usr/local/apache2/htdocs/  # Тестовая страница для backend3
