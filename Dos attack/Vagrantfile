@@ -5,24 +5,38 @@
 ENV['VAGRANT_SERVER_URL'] = 'https://vagrant.elab.pro'
 ## конфиг стенда
 Vagrant.configure("2") do |config|
+
+    machine_resources = {
+        "WebServer" => {
+            "cpus" => 2,
+            "memory" => "1024",
+            "ip" => "192.168.250.10"
+        },
+        "Client" => {
+            "cpus" => 2,
+            "memory" => "2048",
+            "ip" => "192.168.250.20"
+        }
+    }
+
     config.vm.synced_folder ".", "/vagrant", disabled: true
     config.vm.boot_timeout = 600
     config.vm.box_download_insecure=true
+    config.vm.box = "ubuntu/jammy64"
+    config.vm.disk :disk, size: "20GB", primary: true
+    config.vm.provision "shell", path: "docker.sh"
 
-  #TODO надо сменить имя
-    config.vm.define "web_server" do |config|   # устанавливаем имя для вм в vagrant (будет отображаться в списке машин `vagrant status`)
-      config.vm.box = "ubuntu/jammy64"
-      config.vm.hostname = "web_server"
-      config.vm.network "private_network", ip: "192.168.250.10"
-      config.vm.disk :disk, size: "20GB", primary: true
-      
-      config.vm.provider "virtualbox" do |server|
-        server.name = "web_server"  # устанавливаем имя для вм в virtualbox
-        server.cpus = 2
-        server.memory = "2048"
-      end
-      config.vm.synced_folder ".", "/vagrant", disabled: true
-      config.vm.provision "shell", path: "docker.sh"
-      config.vm.synced_folder "./nginx-lb", "/opt/nginx-lb"
+    machine_resources.each do |name, resources|
+        config.vm.define name do |config|  # устанавливаем имя для вм в vagrant
+            config.vm.hostname = name
+            config.vm.network "private_network", ip: resources["ip"]
+            config.vm.synced_folder "./"+name, "/opt"
+
+            config.vm.provider "virtualbox" do |server|
+                server.name = name  # устанавливаем имя для вм в virtualbox
+                server.cpus = resources["cpus"]
+                server.memory = resources["memory"]
+            end
+        end
     end
-  end
+end

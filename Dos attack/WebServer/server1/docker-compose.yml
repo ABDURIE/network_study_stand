@@ -1,0 +1,18 @@
+services:
+  # NGINX
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "8080:80"  # Проброс порта 8080 на хосте на 80 в контейнере
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf  # Используем пользовательский конфиг для NGINX
+    depends_on:
+      - server1
+
+  # Server 1
+  server1:
+    image: httpd:latest
+    container_name: server1
+    volumes:
+      - ./html:/usr/local/apache2/htdocs/  # Тестовая страница для server1
