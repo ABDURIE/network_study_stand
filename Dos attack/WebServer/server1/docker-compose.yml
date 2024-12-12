@@ -9,6 +9,9 @@ services:
       - ./nginx.conf:/etc/nginx/nginx.conf  # Используем пользовательский конфиг для NGINX
     depends_on:
       - server1
+#      - server2
+#      - server3
+    restart: unless-stopped #Если контейнер упал, перезагружать его пока пользователь сам не остановит
 
   # Server 1
   server1:
@@ -16,3 +19,20 @@ services:
     container_name: server1
     volumes:
       - ./html:/usr/local/apache2/htdocs/  # Тестовая страница для server1
+    restart: unless-stopped
+
+#  # Server 2
+#  server2:
+#    image: httpd:latest
+#    container_name: server2
+#    volumes:
+#      - ./html2:/usr/local/apache2/htdocs/
+#    restart: unless-stopped
+#
+#  # Server 3
+#  server3:
+#    image: httpd:latest
+#    container_name: server3
+#    volumes:
+#      - ./html3:/usr/local/apache2/htdocs/
+#    restart: unless-stopped
