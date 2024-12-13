@@ -220,7 +220,7 @@ docker compose down -v
 - [Docker Hub — Apache (httpd)](https://hub.docker.com/_/httpd) — Страница с официальным образом Apache HTTP Server на Docker Hub.
 - [Tmux](https://habr.com/ru/articles/327630) - Страница с описанием и примерами для команды tmux
 - [SampleCaptures](https://wiki.wireshark.org/SampleCaptures#arprarp) - Страница с примерами pcap файлов от wireshark.
-- [YouTobe](https://youtube.com/playlist?list=PLcDkQ2Au8aVNXuTxX18aw5uP4MrBeg16p) - Крус по основам анализа сетевого трафика.
+- [YouTube](https://youtube.com/playlist?list=PLcDkQ2Au8aVNXuTxX18aw5uP4MrBeg16p) - Крус по основам анализа сетевого трафика.
 Эти ресурсы помогут вам лучше понять, как работают компоненты данного проекта, и освоить их для дальнейшего использования.
 
 ---
